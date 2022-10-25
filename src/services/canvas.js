@@ -40,7 +40,7 @@ export const patientCreate = (payload) => {
     extension: [
       {
         url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
-        valueCode: payload.gender,
+        valueCode: "M",
       },
     ],
     active: true,

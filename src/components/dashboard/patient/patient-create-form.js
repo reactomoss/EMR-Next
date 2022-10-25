@@ -16,33 +16,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { DatePicker } from '@mui/lab';
 import { FileDropzone } from "../../file-dropzone";
 import { QuillEditor } from "../../quill-editor";
 
-const categoryOptions = [
+const genderOptions = [
   {
-    label: "Healthcare",
-    value: "healthcare",
+    label: "Make",
+    value: "make",
   },
   {
-    label: "Makeup",
-    value: "makeup",
+    label: "Femail",
+    value: "femail",
   },
   {
-    label: "Dress",
-    value: "dress",
+    label: "Other",
+    value: "other",
   },
   {
-    label: "Skincare",
-    value: "skincare",
-  },
-  {
-    label: "Jewelry",
-    value: "jewelry",
-  },
-  {
-    label: "Blouse",
-    value: "blouse",
+    label: "Unknown",
+    value: "unknown",
   },
 ];
 
@@ -55,7 +48,9 @@ export const PatientCreateForm = (props) => {
       category: "",
       description: "",
       images: [],
-      name: "",
+      firstName: "",
+      lastName: "",
+      birthDate: new Date(),
       newPrice: 0,
       oldPrice: 0,
       sku: "IYV-8745",
@@ -101,6 +96,10 @@ export const PatientCreateForm = (props) => {
     setFiles([]);
   };
 
+  const handleStartDateChange = (date) => {
+    formik.setFieldValue('birthDate', date);
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} {...props}>
       <Card>
@@ -111,7 +110,9 @@ export const PatientCreateForm = (props) => {
             </Grid>
             <Grid item md={8} xs={12}>
               <TextField
-                error={Boolean(formik.touched.firstName && formik.errors.firstName)}
+                error={Boolean(
+                  formik.touched.firstName && formik.errors.firstName
+                )}
                 fullWidth
                 helperText={formik.touched.firstName && formik.errors.firstName}
                 label="First Name"
@@ -121,8 +122,10 @@ export const PatientCreateForm = (props) => {
                 value={formik.values.firstName}
               />
               <TextField
-                sx={{ mt: 3 }}
-                error={Boolean(formik.touched.lastName && formik.errors.lastName)}
+                sx={{ mt: 3, mb: 3 }}
+                error={Boolean(
+                  formik.touched.lastName && formik.errors.lastName
+                )}
                 fullWidth
                 helperText={formik.touched.lastName && formik.errors.lastName}
                 label="Last Name"
@@ -131,28 +134,36 @@ export const PatientCreateForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.lastName}
               />
-              <TextField
-                sx={{ mt: 3 }}
-                error={Boolean(formik.touched.birthDate && formik.errors.birthDate)}
+              <DatePicker
+                sx={{ mt: 3, mb: 3 }}
+                error={Boolean(
+                  formik.touched.birthDate && formik.errors.birthDate
+                )}
                 fullWidth
                 helperText={formik.touched.birthDate && formik.errors.birthDate}
+                inputFormat="dd/MM/yyyy"
                 label="Date of birth"
-                name="birthDate"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
+                onChange={handleStartDateChange}
+                renderInput={(inputProps) => <TextField {...inputProps} />}
                 value={formik.values.birthDate}
               />
               <TextField
                 sx={{ mt: 3 }}
                 error={Boolean(formik.touched.gender && formik.errors.gender)}
                 fullWidth
-                helperText={formik.touched.gender && formik.errors.gender}
                 label="Sex at birth"
                 name="gender"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
+                select
                 value={formik.values.gender}
-              />
+              >
+                {genderOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <TextField
                 sx={{ mt: 3 }}
                 error={Boolean(formik.touched.phone && formik.errors.phone)}
@@ -160,6 +171,8 @@ export const PatientCreateForm = (props) => {
                 helperText={formik.touched.phone && formik.errors.phone}
                 label="Phone number"
                 name="phone"
+                type="number"
+                maxlength="12"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.phone}
