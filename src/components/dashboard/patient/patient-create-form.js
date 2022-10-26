@@ -16,9 +16,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from '@mui/lab';
+import { DatePicker } from "@mui/lab";
 import { FileDropzone } from "../../file-dropzone";
 import { QuillEditor } from "../../quill-editor";
+import { patientCreate } from "../../../services/canvas";
 
 const genderOptions = [
   {
@@ -69,9 +70,11 @@ export const PatientCreateForm = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        // NOTE: Make API request
-        toast.success("Product created!");
-        router.push("/dashboard/products").catch(console.error);
+        console.log("submit", values);
+        patientCreate(values).then(() => {
+          toast.success("Product created!");
+          router.push("/dashboard/patients").catch(console.error);
+        });
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong!");
@@ -97,7 +100,7 @@ export const PatientCreateForm = (props) => {
   };
 
   const handleStartDateChange = (date) => {
-    formik.setFieldValue('birthDate', date);
+    formik.setFieldValue("birthDate", date);
   };
 
   return (
@@ -172,7 +175,6 @@ export const PatientCreateForm = (props) => {
                 label="Phone number"
                 name="phone"
                 type="number"
-                maxlength="12"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.phone}

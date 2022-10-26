@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 
 const baseUrl = "https://fhir-lex.preview.canvasmedical.com";
 
@@ -35,6 +36,10 @@ export const patientSearch = () => {
 };
 
 export const patientCreate = (payload) => {
+  const telecom = [{
+    system: 'phone',
+    value: payload.phone.toString(),
+  }];
   const body = {
     resourceType: "Patient",
     extension: [
@@ -51,6 +56,7 @@ export const patientCreate = (payload) => {
         given: [payload.firstName],
       },
     ],
+    telecom: JSON.stringify(telecom),
     gender: payload.gender === "M" ? "male" : "female",
     birthDate: moment(payload.birthDate).format("YYYY-MM-DD"),
   };
@@ -58,7 +64,7 @@ export const patientCreate = (payload) => {
   return axios
     .post(url, body, options)
     .then((res) => {
-      console.log("create-res");
+      console.log("create-res", res);
     })
     .catch((err) => console.error(err));
 };

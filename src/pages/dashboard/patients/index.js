@@ -1,46 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import NextLink from "next/link";
 import {
   Box,
   Button,
   Card,
   Container,
-  Divider,
   Grid,
   InputAdornment,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
 import { AuthGuard } from "../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
 import { PatientListTable } from "../../../components/dashboard/patient/patient-list-table";
-import { Download as DownloadIcon } from "../../../icons/download";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
-import { Upload as UploadIcon } from "../../../icons/upload";
 import { gtm } from "../../../lib/gtm";
 import { patientSearch } from "../../../services/canvas";
-
-const tabs = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Accepts Marketing",
-    value: "hasAcceptedMarketing",
-  },
-  {
-    label: "Prospect",
-    value: "isProspect",
-  },
-  {
-    label: "Returning",
-    value: "isReturning",
-  },
-];
 
 const sortOptions = [
   {
@@ -226,46 +203,18 @@ const PatientList = () => {
                 <Typography variant="h4">Patients</Typography>
               </Grid>
               <Grid item>
-                <Button
-                  startIcon={<PlusIcon fontSize="small" />}
-                  variant="contained"
-                >
-                  Add
-                </Button>
+                <NextLink href={`/dashboard/patients/new`} passHref>
+                  <Button
+                    startIcon={<PlusIcon fontSize="small" />}
+                    variant="contained"
+                  >
+                    New Patient
+                  </Button>
+                </NextLink>
               </Grid>
             </Grid>
-            <Box
-              sx={{
-                m: -1,
-                mt: 3,
-              }}
-            >
-              <Button startIcon={<UploadIcon fontSize="small" />} sx={{ m: 1 }}>
-                Import
-              </Button>
-              <Button
-                startIcon={<DownloadIcon fontSize="small" />}
-                sx={{ m: 1 }}
-              >
-                Export
-              </Button>
-            </Box>
           </Box>
           <Card>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              sx={{ px: 3 }}
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-            <Divider />
             <Box
               sx={{
                 alignItems: "center",
@@ -294,7 +243,7 @@ const PatientList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search customers"
+                  placeholder="Search patients"
                 />
               </Box>
               <TextField

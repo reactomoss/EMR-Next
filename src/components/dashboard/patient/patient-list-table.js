@@ -141,7 +141,7 @@ export const PatientListTable = (props) => {
                         {getInitials(patient.name)}
                       </Avatar>
                       <Box sx={{ ml: 1 }}>
-                        <NextLink href="/dashboard/patient/1" passHref>
+                        <NextLink href={`/dashboard/patients/${patient.id}`} passHref>
                           <Link color="inherit" variant="subtitle2">
                             {patient.firstName} {patient.lastName}
                           </Link>
